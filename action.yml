@@ -1,0 +1,10 @@
+name: 'Setup Kubernetes'
+description: 'Setup Kubernetes for PrivateCircle'
+branding:
+  icon: 'terminal'
+  color: 'blue'
+runs:
+  using: "composite"
+  steps:
+    - run: ${{ github.action_path }}/action.sh
+      shell: bash
