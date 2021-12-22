@@ -4,6 +4,8 @@ This github action sets up an opinionated kubernetes cli environment. As part of
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/)
 - [helmfile](https://github.com/roboll/helmfile)
 - [helm-diff](https://github.com/databus23/helm-diff)
+- [helm secrets]()https://github.com/jkroepke/helm-secrets
+- [sops](https://github.com/mozilla/sops)
 
 ## Usage
 
