@@ -21,6 +21,6 @@ helm plugin install https://github.com/jkroepke/helm-secrets --version v3.11.0
 # Install sops
 SOPS_VERSION="v3.7.1"
 SOPS_OS="linux"
-curl -L "https://github.com/mozilla/sops/releases/download/$SOPS_VERSION/$SOPS_OS" -O sops
+curl -L -O sops "https://github.com/mozilla/sops/releases/download/$SOPS_VERSION/$SOPS_OS"
 chmod +x sops
 sudo install -o root -g root -m 0755 sops /usr/local/bin/sops
