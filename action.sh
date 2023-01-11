@@ -10,8 +10,11 @@ mkdir -p ~/.kube
 echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
 sudo chmod 600 ~/.kube/config
 
-curl -LO https://github.com/roboll/helmfile/releases/download/v0.140.0/helmfile_linux_amd64
-sudo install -o root -g root -m 0755 helmfile_linux_amd64 /usr/local/bin/helmfile
+
+HELMFILE_VERSION="v0.148.1"
+curl -Lo helmfile.tar.gz https://github.com/helmfile/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_linux_amd64.tar.gz
+sudo tar -xf helmfile.tar.gz -C /usr/local/bin/
+sudo chmod 0755 /usr/local/bin/helmfile
 
 # Setup helm plugin `helm-diff`
 HELM_DIFF_VERSION="3.1.3"
