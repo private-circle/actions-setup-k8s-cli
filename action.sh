@@ -14,7 +14,7 @@ curl -LO https://github.com/roboll/helmfile/releases/download/v0.140.0/helmfile_
 sudo install -o root -g root -m 0755 helmfile_linux_amd64 /usr/local/bin/helmfile
 
 # Setup helm plugin `helm-diff`
-HELM_DIFF_VERSION="3.1.3"
+HELM_DIFF_VERSION="3.6.0"
 helm plugin install https://github.com/databus23/helm-diff --version "$HELM_DIFF_VERSION"
 
 # Setup helm plugin `helm-secrets`
