@@ -17,7 +17,7 @@ sudo tar -xf helmfile.tar.gz -C /usr/local/bin/
 sudo chmod 0755 /usr/local/bin/helmfile
 
 # Setup helm plugin `helm-diff`
-HELM_DIFF_VERSION="3.1.3"
+HELM_DIFF_VERSION="3.6.0"
 helm plugin install https://github.com/databus23/helm-diff --version "$HELM_DIFF_VERSION"
 
 # Setup helm plugin `helm-secrets`
