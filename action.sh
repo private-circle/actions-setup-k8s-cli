@@ -11,7 +11,7 @@ echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
 sudo chmod 600 ~/.kube/config
 
 
-HELMFILE_VERSION="0.156.0"
+HELMFILE_VERSION="0.148.1"
 curl -Lo helmfile.tar.gz https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz
 sudo tar -xf helmfile.tar.gz -C /usr/local/bin/
 sudo chmod 0755 /usr/local/bin/helmfile
