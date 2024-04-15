@@ -10,6 +10,10 @@ mkdir -p ~/.kube
 echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
 sudo chmod 600 ~/.kube/config
 
+HELM_VERSION="v3.14.4"
+curl -Lo helm.tar.gz https://get.helm.sh/helm-"$HELM_VERSION"-linux-amd64.tar.gz
+sudo tar -xf helm.tar.gz linux-amd64/helm -C /usr/local/bin/
+sudo chmod 0755 /usr/local/bin/helm
 
 HELMFILE_VERSION="0.148.1"
 curl -Lo helmfile.tar.gz https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz
@@ -18,11 +22,18 @@ sudo chmod 0755 /usr/local/bin/helmfile
 
 # Setup helm plugin `helm-diff`
 HELM_DIFF_VERSION="3.6.0"
-helm plugin install https://github.com/databus23/helm-diff --version "$HELM_DIFF_VERSION"
+is_helm_diff_installed="$(helm plugin list | grep 'diff')"
+if [[ "$is_helm_diff_installed" == "" ]]; then
+  helm plugin install https://github.com/databus23/helm-diff --version "$HELM_DIFF_VERSION"
+fi
 
 # Setup helm plugin `helm-secrets`
 HELM_SECRETS_VERSION="4.1.1"
-helm plugin install https://github.com/jkroepke/helm-secrets --version v"$HELM_SECRETS_VERSION"
+is_helm_secrets_installed="$(helm plugin list | grep 'secrets')"
+if [[ "$is_helm_secrets_installed" == "" ]]; then
+  helm plugin install https://github.com/jkroepke/helm-secrets --version v"$HELM_SECRETS_VERSION"
+fi
+
 
 # Install sops
 SOPS_VERSION="v3.7.1"
