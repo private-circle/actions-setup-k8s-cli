@@ -7,9 +7,23 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 rm kubectl 
 mkdir -p ~/.kube
-echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
+if [ -n "$CLUSTER_IS_EKS" ]; then
+    if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+        echo "Please ensure that the AWS environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, etc) are set" && exit 1
+    fi
+    if [ -z "$CLUSTER_NAME" ]; then
+        echo "For EKS, please ensure that the cluster's name is set via the environment variable CLUSTER_NAME" && exit 1
+    fi
+    aws \
+        eks \
+        update-kubeconfig \
+        --region "${CLUSTER_REGION:-ap-south-1}" \
+        --name "$CLUSTER_NAME" \
+        --kubeconfig ~/.kube/config
+else
+    echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
+fi
 sudo chmod 600 ~/.kube/config
-
 
 HELMFILE_VERSION="0.148.1"
 curl -Lo helmfile.tar.gz https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz
