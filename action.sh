@@ -16,12 +16,12 @@ if [ -n "$CLUSTER_IS_EKS" ]; then
     fi
     cluster_name="$CLUSTER_NAME_EKS"
     cluster_region="${CLUSTER_REGION:-ap-south-1}"
-    if ! aws eks update-kubeconfig --region "$cluster_region" --name "$cluster_name" --kubeconfig ~/.kube/config; then
-        echo "Failed to obtain kubeconfig for EKS cluster $cluster_name in region $cluster_region. Please check if the cluster exists and that you have the right set of permissions to access it"
-        exit 1
-    else
-        echo "Kubeconfig updated for cluster $cluster_name"
-    fi
+    aws \
+        eks \
+        update-kubeconfig \
+        --region "$cluster_region" \
+        --name "$cluster_name" \
+        --kubeconfig ~/.kube/config
 else
     echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
 fi
