@@ -7,7 +7,24 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 rm kubectl 
 mkdir -p ~/.kube
-echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
+if [ -n "$CLUSTER_IS_EKS" ]; then
+    if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+        echo "Please ensure that the AWS environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, etc) are set" && exit 1
+    fi
+    if [ -z "$CLUSTER_NAME" ]; then
+        echo "For EKS, please ensure that the cluster's name is set via the environment variable CLUSTER_NAME"
+    fi
+    cluster_name="$CLUSTER_NAME_EKS"
+    cluster_region="${CLUSTER_REGION:-ap-south-1}"
+    if ! aws eks update-kubeconfig --region "$cluster_region" --name "$cluster_name" --kubeconfig ~/.kube/config; then
+        echo "Failed to obtain kubeconfig for EKS cluster $cluster_name in region $cluster_region. Please check if the cluster exists and that you have the right set of permissions to access it"
+        exit 1
+    else
+        echo "Kubeconfig updated for cluster $cluster_name"
+    fi
+else
+    echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
+fi
 sudo chmod 600 ~/.kube/config
 
 
