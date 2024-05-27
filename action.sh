@@ -26,7 +26,7 @@ fi
 sudo chmod 600 ~/.kube/config
 
 echo "Kube-config obtained. Contexts available:"
-kubectl config get-contexts;
+KUBECONFIG=$HOME/.kube/config kubectl config get-contexts;
 
 
 HELMFILE_VERSION="0.148.1"
