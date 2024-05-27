@@ -17,8 +17,8 @@ if [ -n "$CLUSTER_IS_EKS" ]; then
     aws \
         eks \
         update-kubeconfig \
-        --region "$CLUSTER_NAME" \
-        --name "${CLUSTER_REGION:-ap-south-1}" \
+        --region "${CLUSTER_REGION:-ap-south-1}" \
+        --name "$CLUSTER_NAME" \
         --kubeconfig ~/.kube/config
 else
     echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
