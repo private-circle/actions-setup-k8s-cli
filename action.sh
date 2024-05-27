@@ -12,15 +12,13 @@ if [ -n "$CLUSTER_IS_EKS" ]; then
         echo "Please ensure that the AWS environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, etc) are set" && exit 1
     fi
     if [ -z "$CLUSTER_NAME" ]; then
-        echo "For EKS, please ensure that the cluster's name is set via the environment variable CLUSTER_NAME"
+        echo "For EKS, please ensure that the cluster's name is set via the environment variable CLUSTER_NAME" && exit 1
     fi
-    cluster_name="$CLUSTER_NAME_EKS"
-    cluster_region="${CLUSTER_REGION:-ap-south-1}"
     aws \
         eks \
         update-kubeconfig \
-        --region "$cluster_region" \
-        --name "$cluster_name" \
+        --region "$CLUSTER_NAME" \
+        --name "${CLUSTER_REGION:-ap-south-1}" \
         --kubeconfig ~/.kube/config
 else
     echo "$KUBE_CONFIG_DATA" | base64 --decode > ~/.kube/config
