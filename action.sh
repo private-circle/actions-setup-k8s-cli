@@ -30,6 +30,10 @@ curl -Lo helmfile.tar.gz https://github.com/helmfile/helmfile/releases/download/
 sudo tar -xf helmfile.tar.gz -C /usr/local/bin/
 sudo chmod 0755 /usr/local/bin/helmfile
 
+HELM_VERSION="v3.12.3"
+curl -Lo helm.tar.gz https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz
+sudo tar -xf helm.tar.gz linux-amd64/helm --strip-components 1 -C /usr/local/bin/helm
+
 # Setup helm plugin `helm-diff`
 HELM_DIFF_VERSION="3.6.0"
 helm plugin install https://github.com/databus23/helm-diff --version "$HELM_DIFF_VERSION"
