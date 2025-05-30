@@ -35,7 +35,7 @@ HELM_DIFF_VERSION="3.6.0"
 helm plugin install https://github.com/databus23/helm-diff --version "$HELM_DIFF_VERSION"
 
 # Setup helm plugin `helm-secrets`
-HELM_SECRETS_VERSION="4.1.1"
+HELM_SECRETS_VERSION="4.6.5"
 helm plugin install https://github.com/jkroepke/helm-secrets --version v"$HELM_SECRETS_VERSION"
 
 # Install sops
