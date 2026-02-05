@@ -2,8 +2,9 @@
 
 set -e
 
-# Setup kubectl
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+# Pin kubectl version to v1.35.0
+kubectl_version="v1.35.0"
+curl -LO "https://dl.k8s.io/release/${kubectl_version}/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 rm kubectl 
 mkdir -p ~/.kube
