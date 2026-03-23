@@ -3,8 +3,35 @@ description: 'Setup Kubernetes for PrivateCircle'
 branding:
   icon: 'terminal'
   color: 'blue'
+inputs:
+  kubectl-version:
+    description: 'kubectl version to install (for example: v1.35.0)'
+    required: false
+    default: 'v1.35.0'
+  helm-diff-version:
+    description: 'helm-diff plugin version to install (for example: 3.6.0)'
+    required: false
+    default: '3.6.0'
+  helm-secrets-version:
+    description: 'helm-secrets plugin version to install without a leading v (for example: 4.6.5)'
+    required: false
+    default: '4.6.5'
+  helmfile-version:
+    description: 'helmfile version to install (for example: 0.148.1)'
+    required: false
+    default: '0.148.1'
+  sops-version:
+    description: 'sops version to install (for example: v3.7.1)'
+    required: false
+    default: 'v3.7.1'
 runs:
   using: "composite"
   steps:
     - run: ${{ github.action_path }}/action.sh
       shell: bash
+      env:
+        KUBECTL_VERSION: ${{ inputs.kubectl-version }}
+        HELM_DIFF_VERSION: ${{ inputs.helm-diff-version }}
+        HELM_SECRETS_VERSION: ${{ inputs.helm-secrets-version }}
+        HELMFILE_VERSION: ${{ inputs.helmfile-version }}
+        SOPS_VERSION: ${{ inputs.sops-version }}

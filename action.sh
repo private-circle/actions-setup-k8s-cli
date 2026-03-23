@@ -2,11 +2,22 @@
 
 set -e
 
-# Pin kubectl version to v1.35.0
-kubectl_version="v1.35.0"
-curl -LO "https://dl.k8s.io/release/${kubectl_version}/bin/linux/amd64/kubectl"
+KUBECTL_VERSION="${KUBECTL_VERSION:-v1.35.0}"
+HELMFILE_VERSION="${HELMFILE_VERSION:-0.148.1}"
+HELM_DIFF_VERSION="${HELM_DIFF_VERSION:-3.6.0}"
+HELM_SECRETS_VERSION="${HELM_SECRETS_VERSION:-4.6.5}"
+SOPS_VERSION="${SOPS_VERSION:-v3.7.1}"
+
+case "$HELM_SECRETS_VERSION" in
+    v*)
+        echo "HELM_SECRETS_VERSION must not include a leading v (for example: 4.6.5)." >&2
+        exit 1
+        ;;
+esac
+
+curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-rm kubectl 
+rm kubectl
 mkdir -p ~/.kube
 if [ -n "$CLUSTER_IS_EKS" ]; then
     if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
@@ -26,21 +37,17 @@ else
 fi
 sudo chmod 600 ~/.kube/config
 
-HELMFILE_VERSION="0.148.1"
 curl -Lo helmfile.tar.gz https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz
 sudo tar -xf helmfile.tar.gz -C /usr/local/bin/
 sudo chmod 0755 /usr/local/bin/helmfile
 
 # Setup helm plugin `helm-diff` (skip if already installed)
-HELM_DIFF_VERSION="3.6.0"
 helm plugin list 2>/dev/null | grep -q diff || helm plugin install https://github.com/databus23/helm-diff --version "$HELM_DIFF_VERSION"
 
 # Setup helm plugin `helm-secrets` (skip if already installed)
-HELM_SECRETS_VERSION="4.6.5"
 helm plugin list 2>/dev/null | grep -q secrets || helm plugin install https://github.com/jkroepke/helm-secrets --version v"$HELM_SECRETS_VERSION"
 
 # Install sops
-SOPS_VERSION="v3.7.1"
 SOPS_OS="linux"
 SOPS_DL_URL="https://github.com/mozilla/sops/releases/download/$SOPS_VERSION/sops-$SOPS_VERSION.$SOPS_OS"
 echo "installing sops from $SOPS_DL_URL"
